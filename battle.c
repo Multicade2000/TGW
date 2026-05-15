@@ -1112,13 +1112,15 @@ void person_update(Person *person)
                     person->hp = person->max_hp;
                 }
             }
-            else if (person->poison > 0)
+            
+            if (person->poison > 0)
             {
                 person->poison--;
 
                 person_damage(person, NULL, 10, FALSE);
             }
-            else if (person->shd_mana > 0)
+            
+            if (person->shd_mana > 0)
             {
                 person->shd_mana--;
             }
@@ -5329,15 +5331,19 @@ void fx_update(FX *fx)
 
         if (dis < 32)
         {
-            for (u_char i = 0; i < btl->max_people; i++)
+            if (fx->target->parry && fx->target->freeze <= 0)
             {
-                if (btl->people[i].turn)
-                {
-                    person_damage(&btl->people[btl->people[i].action[2]], fx->owner, 2500 * btl->people[i].spell_rank[btl->people[i].action[2]], TRUE);
-                }
-            }
+                Person *trg = fx->owner;
 
-            fx->active = FALSE;
+                fx->owner = fx->target;
+                fx->target = trg;
+            }
+            else
+            {
+                person_damage(fx->target, fx->owner, 5, TRUE);
+
+                fx->active = FALSE;
+            }
         }
 
         break;
