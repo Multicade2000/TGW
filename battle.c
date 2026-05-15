@@ -385,20 +385,20 @@ void person_init(Person *person)
                 }
                 else
                 {
-                    person->lvl = 1000;
-                    person->pot[0] = 50;
-                    person->pot[1] = 50;
-                    person->pot[2] = 50;
-                    person->spell_rank[0] = 5;
-                    person->spell_rank[1] = 5;
-                    person->spell_rank[2] = 5;
-                    person->spell_rank[3] = 5;
-                    person->spell_rank[4] = 5;
-                    person->spell_rank[5] = 5;
-                    person->spell_rank[6] = 5;
-                    person->spell_rank[7] = 5;
-                    person->spell_rank[8] = 5;
-                    person->spell_rank[9] = 5;
+                    person->lvl = 1;
+                    person->pot[0] = 0;
+                    person->pot[1] = 0;
+                    person->pot[2] = 0;
+                    person->spell_rank[0] = 1;
+                    person->spell_rank[1] = 1;
+                    person->spell_rank[2] = 1;
+                    person->spell_rank[3] = 1;
+                    person->spell_rank[4] = 1;
+                    person->spell_rank[5] = 1;
+                    person->spell_rank[6] = 1;
+                    person->spell_rank[7] = 1;
+                    person->spell_rank[8] = 1;
+                    person->spell_rank[9] = 1;
                 }
             }
         }
