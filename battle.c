@@ -380,8 +380,6 @@ void person_init(Person *person)
                         person->spell_rank[8] = 1;
                         person->spell_rank[9] = 1;
                     }
-
-                    person->b_load = TRUE;
                 }
                 else
                 {
@@ -400,6 +398,8 @@ void person_init(Person *person)
                     person->spell_rank[8] = 1;
                     person->spell_rank[9] = 1;
                 }
+
+                person->b_load = TRUE;
             }
         }
         else
