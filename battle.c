@@ -5343,7 +5343,7 @@ void fx_update(FX *fx)
             }
             else
             {
-                person_damage(fx->target, fx->owner, 5, TRUE);
+                person_damage(fx->target, fx->owner, 2500 * fx->owner->spell_rank[fx->owner->action[1]], TRUE);
 
                 fx->active = FALSE;
             }
