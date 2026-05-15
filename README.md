@@ -14,7 +14,10 @@ This game has been released for the PS1, it's a RPG game for PSYQ members!
 ![Screen1](https://file.garden/aN1CqmYmaWI-OoD_/PS1/TGW%20S1.png)
 ![Screen2](https://file.garden/aN1CqmYmaWI-OoD_/PS1/TGW%20S2.png)
 
-![Intro](https://file.garden/aN1CqmYmaWI-OoD_/PS1/TGW%20S1.png)(https://youtu.be/huxq4R0GEfE)
-![3DCamMode](https://file.garden/aN1CqmYmaWI-OoD_/PS1/TGW%203D%20Cam%20Mode.gif)
+![Intro](https://youtu.be/huxq4R0GEfE)
+
+<p align="center">
+  <img src="images/gameplay.gif" width="256">
+</p>
 
 Published by HEROIC and Produced by WarStrike
