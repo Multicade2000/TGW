@@ -4170,7 +4170,7 @@ void person_update(Person *person)
 
                                         fire = obj;
                                     }
-                                    
+
                                     person->act_count++;
                                 }
 
@@ -4182,6 +4182,7 @@ void person_update(Person *person)
 
                                 if (!fire)
                                 {
+                                    person->act_count = 0;
                                     person->act = 2;
                                 }
                             }
