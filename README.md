@@ -25,5 +25,6 @@ This game has been released for the PS1, it's a RPG game for PSYQ members!
 # Download Links
 
 ![Pre-1](https://github.com/Multicade2000/TGW/releases/tag/Pre-1)
+![Pre-2](https://github.com/Multicade2000/TGW/releases/tag/Pre-2)
 
 Published by HEROIC and Produced by WarStrike
