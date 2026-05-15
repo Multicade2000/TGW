@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Linux/Windows",
+            "includePath": [
+                "${workspaceFolder}/../third_party/common/syscalls/**",
+                "${workspaceFolder}/../third_party/psyq/include/**",
+                "${workspaceFolder}/../third_party/**",
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}

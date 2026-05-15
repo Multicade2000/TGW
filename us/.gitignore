@@ -1,0 +1,5 @@
+*.elf
+*.map
+*.ps-exe
+*.bin
+*.cue

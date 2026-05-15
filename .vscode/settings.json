@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "libapi.h": "c",
+        "stdio.h": "c"
+    }
+}

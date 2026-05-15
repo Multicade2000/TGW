@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<iso_project image_name="eu/the_great_warriors_eu.bin" cue_sheet="eu/the_great_warriors_eu.cue">
+    <track type="data">
+        <identifiers
+            system            ="PLAYSTATION"
+            application        ="PLAYSTATION"
+            volume            ="GREATW"
+            volume_set        ="GREATW"
+            publisher        ="HEROIC"
+            data_preparer    ="MKPSXISO"
+        />
+        <license file="licensee.dat"/>
+        <directory_tree>
+            <file name="SYSTEM.CNF"    type="data"    source="../system.txt"/>
+            <file name="MAIN-EXE.02"    type="data"    source="TGW.ps-exe"/>
+            <file name="ICON1.TIM"    type="data"    source="../data/main1.tim"/>
+            <file name="ICON2.TIM"    type="data"    source="../data/main2.tim"/>
+            <dir name="DATA">
+                <dir name="SPRT">
+                    <file name="FLAGS.TIM"    type="data"    source="../data/sprt/flags.tim"/>
+                    <file name="TITLE.TIM"    type="data"    source="../data/sprt/title.tim"/>
+                    <file name="CIRCUS.TIM"    type="data"    source="../data/sprt/circus.tim"/>
+                    <file name="MAP.TIM"    type="data"    source="../data/sprt/map.tim"/>
+                    <file name="FONT.TIM"    type="data"    source="../data/sprt/font.tim"/>
+                    <file name="EDGE.TIM"    type="data"    source="../data/sprt/edge.tim"/>
+                    <file name="FX.TIM"    type="data"    source="../data/sprt/fx.tim"/>
+                    <file name="ACTION.TIM"    type="data"    source="../data/sprt/action.tim"/>
+                </dir>
+                <dir name="BACK">
+                    <file name="COJUN.TIM"    type="data"    source="../data/back/cojun_pal.tim"/>
+                    <file name="COWO.TIM"    type="data"    source="../data/back/cowo_pal.tim"/>
+                    <file name="JUNLD.TIM"    type="data"    source="../data/back/junld_pal.tim"/>
+                    <file name="JUNLD2.TIM"    type="data"    source="../data/back/junld_pal2.tim"/>
+                </dir>
+                <dir name="SND">
+                    <file name="MENU1A.VAG"    type="data"    source="../data/snd/menu1a.vag"/>
+                    <file name="MENU1B.VAG"    type="data"    source="../data/snd/menu1b.vag"/>
+                    <file name="MENU2.VAG"    type="data"    source="../data/snd/menu2.vag"/>
+                    <file name="MENU3.VAG"    type="data"    source="../data/snd/menu3.vag"/>
+                    <file name="CODMG.VAG"    type="data"    source="../data/snd/codmg.vag"/>
+                    <file name="COAM1.VAG"    type="data"    source="../data/snd/coam1.vag"/>
+                    <file name="COAM2.VAG"    type="data"    source="../data/snd/coam2.vag"/>
+                    <file name="COPOT.VAG"    type="data"    source="../data/snd/copot.vag"/>
+                    <file name="COMAG11.VAG"    type="data"    source="../data/snd/comag11.vag"/>
+                    <file name="COMAG12.VAG"    type="data"    source="../data/snd/comag12.vag"/>
+                    <file name="COMAG13.VAG"    type="data"    source="../data/snd/comag13.vag"/>
+                    <file name="COMAG21.VAG"    type="data"    source="../data/snd/comag21.vag"/>
+                    <file name="COMAG22.VAG"    type="data"    source="../data/snd/comag22.vag"/>
+                    <file name="COMAG31.VAG"    type="data"    source="../data/snd/comag31.vag"/>
+                    <file name="COMAG32.VAG"    type="data"    source="../data/snd/comag32.vag"/>
+                    <file name="COMAG41.VAG"    type="data"    source="../data/snd/comag41.vag"/>
+                    <file name="COMAG42.VAG"    type="data"    source="../data/snd/comag42.vag"/>
+                    <file name="COMAG51.VAG"    type="data"    source="../data/snd/comag51.vag"/>
+                    <file name="COMAG52.VAG"    type="data"    source="../data/snd/comag52.vag"/>
+                    <file name="COMAG61.VAG"    type="data"    source="../data/snd/comag61.vag"/>
+                    <file name="COMAG62.VAG"    type="data"    source="../data/snd/comag62.vag"/>
+                    <file name="COMAG71.VAG"    type="data"    source="../data/snd/comag71.vag"/>
+                    <file name="COMAG72.VAG"    type="data"    source="../data/snd/comag72.vag"/>
+                    <file name="COMAG81.VAG"    type="data"    source="../data/snd/comag81.vag"/>
+                    <file name="COMAG82.VAG"    type="data"    source="../data/snd/comag82.vag"/>
+                    <file name="COMAG91.VAG"    type="data"    source="../data/snd/comag91.vag"/>
+                    <file name="COMAG92.VAG"    type="data"    source="../data/snd/comag92.vag"/>
+                    <file name="COMAG101.VAG"    type="data"    source="../data/snd/comag101.vag"/>
+                    <file name="COMAG102.VAG"    type="data"    source="../data/snd/comag102.vag"/>
+                    <file name="CODTH.VAG"    type="data"    source="../data/snd/codth.vag"/>
+                </dir>
+                <dir name="MUS">
+                    <file name="INTRO1.MUS" type="data" source="../data/mus/intro1.mus"/>
+                    <file name="INTRO2.MUS" type="data" source="../data/mus/intro2.mus"/>
+                    <file name="TITLE.MUS" type="data" source="../data/mus/title.mus"/>
+                    <file name="EDGECAST.MUS" type="data" source="../data/mus/edgecast.mus"/>
+                    <dir name="INST">
+                        <file name="BASS.VAG" type="data" source="../data/mus/inst/bass.vag"/>
+                        <file name="HORN.VAG" type="data" source="../data/mus/inst/horn.vag"/>
+                        <file name="HORN2.VAG" type="data" source="../data/mus/inst/horn2.vag"/>
+                        <file name="TRUMPET.VAG" type="data" source="../data/mus/inst/trumpet.vag"/>
+                        <file name="GUITAR.VAG" type="data" source="../data/mus/inst/guitar.vag"/>
+                        <file name="GUITAR2.VAG" type="data" source="../data/mus/inst/guitar2.vag"/>
+                        <file name="GUITAR3.VAG" type="data" source="../data/mus/inst/guitar3.vag"/>
+                        <file name="GUITAR4.VAG" type="data" source="../data/mus/inst/guitar4.vag"/>
+                        <file name="STRING.VAG" type="data" source="../data/mus/inst/string.vag"/>
+                        <file name="STRING2.VAG" type="data" source="../data/mus/inst/string2.vag"/>
+                        <file name="STRING3.VAG" type="data" source="../data/mus/inst/string3.vag"/>
+                        <file name="STRING4.VAG" type="data" source="../data/mus/inst/string4.vag"/>
+                        <file name="STRING5.VAG" type="data" source="../data/mus/inst/string5.vag"/>
+                        <file name="STRING6.VAG" type="data" source="../data/mus/inst/string6.vag"/>
+                        <file name="DRUM.VAG" type="data" source="../data/mus/inst/drum.vag"/>
+                        <file name="DRUM2.VAG" type="data" source="../data/mus/inst/drum2.vag"/>
+                        <file name="DRUM3.VAG" type="data" source="../data/mus/inst/drum3.vag"/>
+                    </dir>
+                </dir>
+                <dir name="MDL">
+                    <file name="KING.TIM" type="data" source="../data/mdl/king.tim"/>
+                    <file name="KING.TMD" type="data" source="../data/mdl/king.tmd"/>
+                </dir>
+                <dir name="XA">
+                    <file name="SPCH1.XA" type="xa" source="../data/xa/speech1.xa"/>
+                    <file name="SPCH2.XA" type="xa" source="../data/xa/speech2.xa"/>
+                </dir>
+                <dir name="MOV">
+                    <file name="LOGO.STR" type="str" source="../data/mov/logo.str"/>
+                </dir>
+            </dir>
+            <dummy sectors="1024"/>
+        </directory_tree>
+    </track>
+</iso_project>
