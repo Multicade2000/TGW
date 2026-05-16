@@ -20,7 +20,7 @@ This game has been released for the PS1, it's a RPG game for PSYQ members!
 
 # Intro Scene
 
-[![Intro](https://i9.ytimg.com/vi_webp/huxq4R0GEfE/mq2.webp?sqp=CKT6nNAG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEcgEyh_MA8=&rs=AOn4CLA4aiYGiJ2-Od8Cj-gIRZt4PPoG9g)](https://youtu.be/huxq4R0GEfE)
+[![Intro](https://file.garden/aN1CqmYmaWI-OoD_/PS1/intro.webp)](https://youtu.be/huxq4R0GEfE)
 
 # Download Links
 
