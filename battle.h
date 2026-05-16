@@ -103,6 +103,8 @@ typedef struct
     u_char active;
     u_char retry;
     u_char reverse;
+
+    u_char b_save;
 } SceneBattle;
 
 void battle_init(SceneBattle *battle);

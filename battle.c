@@ -2,11 +2,11 @@
 #include "game.h"
 
 FX *fire;
-u_char b_save = FALSE;
 
 void battle_init(SceneBattle *battle)
 {
     battle->people = NULL;
+    battle->b_save = FALSE;
     battle->fx = NULL;
     battle->active = TRUE;
     battle->max_people = 1;
@@ -1847,7 +1847,7 @@ void person_update(Person *person)
                             {
                                 person->hor_pressed = TRUE;
                                 sound_playsfx(&sfx[0], 12, 0x0000, FALSE, 255, 255);
-                                b_save = !b_save;
+                                btl->b_save = !btl->b_save;
                             }
                         }
                         else
@@ -1862,7 +1862,7 @@ void person_update(Person *person)
                                 person->accept_pressed = TRUE;
                                 sound_playsfx(&sfx[2], 12, 0x0000, FALSE, 255, 255);
 
-                                if (b_save)
+                                if (btl->b_save)
                                 {
                                     for (u_char i = 0; i < btl->max_people; i++)
                                     {
@@ -2248,8 +2248,8 @@ void person_update(Person *person)
 
                         graph_drawtext(128, 128 - 28, 128, 15, lodm1, 1);
                         graph_drawtext(128, 128 - 16, 128, 16, lodm2, 1);
-                        graph_drawtext(64, 128 + 16, b_save ? 128 : 63, 2, lod1, 1);
-                        graph_drawtext(192, 128 + 16, !b_save ? 128 : 63, 2, lod2, 1);
+                        graph_drawtext(64, 128 + 16, btl->b_save ? 128 : 63, 2, lod1, 1);
+                        graph_drawtext(192, 128 + 16, !btl->b_save ? 128 : 63, 2, lod2, 1);
 
                         graph_drawtile(0,graph.ResH / 4, graph.ResW, graph.ResH / 2);
                     }
@@ -2295,8 +2295,8 @@ void person_update(Person *person)
 
                         graph_drawtext(128, 128 - 28, 128, 19, lodm1, 1);
                         graph_drawtext(128, 128 - 16, 128, 15, lodm2, 1);
-                        graph_drawtext(64, 128 + 16, b_save ? 128 : 63, 3, lod1, 1);
-                        graph_drawtext(192, 128 + 16, !b_save ? 128 : 63, 2, lod2, 1);
+                        graph_drawtext(64, 128 + 16, btl->b_save ? 128 : 63, 3, lod1, 1);
+                        graph_drawtext(192, 128 + 16, !btl->b_save ? 128 : 63, 2, lod2, 1);
 
                         graph_drawtile(0,graph.ResH / 4, graph.ResW, graph.ResH / 2);
                     }
