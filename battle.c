@@ -2095,7 +2095,7 @@ void person_update(Person *person)
                                 vis = 7;
                             }
 
-                            while (vis > 1 && (!person->spell[vis + 2]))
+                            while (vis > 0 && (!person->spell[vis + 2]))
                             {
                                 vis--;
                             }
