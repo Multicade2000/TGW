@@ -4,6 +4,8 @@ GameGraph graph;
 
 void graph_init(int code)
 {
+    graph.last_vsync = 0;
+
     if (code == 0)
     {
         graph.ResW = 256;
@@ -83,7 +85,11 @@ void graph_init(int code)
 void graph_disp()
 {
     DrawSync(0);
-    VSync(0);
+
+    while(!graph_vsync())
+    {
+        VSync(0);
+    }
 
     PutDispEnv(&graph.disp[graph.db]);
     PutDrawEnv(&graph.draw[graph.db]);
@@ -640,4 +646,18 @@ void graph_updateCam()
 
     // SetRotMatrix(&graph.camMat);
     // SetTransMatrix(&graph.camMat);
+}
+
+u_char graph_vsync()
+{
+    int current_vsync = VSync(-1);
+
+    if (current_vsync - graph.last_vsync >= 1)
+    {
+        graph.last_vsync = current_vsync;
+
+        return 1;
+    }
+
+    return 0;
 }

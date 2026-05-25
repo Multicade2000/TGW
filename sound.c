@@ -229,7 +229,7 @@ void sound_stopmusic()
 
 void sound_musicsync()
 {
-    int cnt = 80;
+    int cnt = 100;
 
     while (cnt > 0)
     {

@@ -35,6 +35,8 @@ typedef struct
     SVECTOR camRot;
     MATRIX camMat;
     u_char scr_fade;
+
+    int last_vsync;
 } GameGraph;
 
 typedef struct
@@ -73,3 +75,4 @@ void graph_inittext(TextChar* charer);
 void graph_settext(const u_char *text, TextChar *charer, u_int size);
 void graph_drawtile(int x, int y, int w, int h);
 void graph_updateCam();
+u_char graph_vsync();
