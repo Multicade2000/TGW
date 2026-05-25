@@ -67,6 +67,14 @@ typedef struct
     VECTOR def_loc;
     VECTOR pivot;
     VECTOR target;
+
+    u_char dmgt;
+    int dmgt_x;
+    int dmgt_y;
+    int dmgt_speed;
+    u_int dmgt_c;
+    u_int dmgt_tick;
+
 } Person;
 
 typedef struct FX

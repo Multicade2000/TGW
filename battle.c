@@ -82,12 +82,12 @@ void battle_init(SceneBattle *battle)
 
     if (battle->max_people >= 3)
     {
-        battle->people[2].spr.MovVector.vy = -128;
+        battle->people[2].spr.MovVector.vy = -(graph.ResH / 2);
     }
 
     if (battle->max_people >= 4)
     {
-        battle->people[3].spr.MovVector.vy = 128;
+        battle->people[3].spr.MovVector.vy = (graph.ResH / 2);
     }
 
     battle->people[0].def_loc = battle->people[0].spr.MovVector;
@@ -143,12 +143,12 @@ void battle_update(SceneBattle *battle)
 
                 if (battle->max_people >= 3)
                 {
-                    battle->people[2].spr.MovVector.vy = -128;
+                    battle->people[2].spr.MovVector.vy = -(graph.ResH / 2);
                 }
 
                 if (battle->max_people >= 4)
                 {
-                    battle->people[3].spr.MovVector.vy = 128;
+                    battle->people[3].spr.MovVector.vy = (graph.ResH / 2);
                 }
 
                 battle->people[0].def_loc = battle->people[0].spr.MovVector;
@@ -276,6 +276,13 @@ void person_init(Person *person)
     person->action[2] = 0;
     person->alive = TRUE;
     person->turn_start = FALSE;
+
+    person->dmgt = FALSE;
+    person->dmgt_speed = -4;
+    person->dmgt_c = 0;
+    person->dmgt_x = 0;
+    person->dmgt_y = 0;
+    person->dmgt_tick = 0;
 
     person->dodge = FALSE;
     person->parry = FALSE;
@@ -768,6 +775,11 @@ void person_update(Person *person)
                 person->spr.MovVector.vx = person->pivot.vx;
                 person->spr.MovVector.vy = person->pivot.vy;
 
+                person->dmgt_x = (person->spr.MovVector.vx / 2) + 128;
+                person->dmgt_y = ((person->spr.MovVector.vy + 48) / 2) + 128;
+
+                person->dmgt = TRUE;
+
                 if (person->hp > 0)
                 {
                     if (person->freeze <= 0)
@@ -1112,14 +1124,14 @@ void person_update(Person *person)
                     person->hp = person->max_hp;
                 }
             }
-            
+
             if (person->poison > 0)
             {
                 person->poison--;
 
                 person_damage(person, NULL, 10, FALSE);
             }
-            
+
             if (person->shd_mana > 0)
             {
                 person->shd_mana--;
@@ -2251,7 +2263,7 @@ void person_update(Person *person)
                         graph_drawtext(64, 128 + 16, btl->b_save ? 128 : 63, 2, lod1, 1);
                         graph_drawtext(192, 128 + 16, !btl->b_save ? 128 : 63, 2, lod2, 1);
 
-                        graph_drawtile(0,graph.ResH / 4, graph.ResW, graph.ResH / 2);
+                        graph_drawtile(0, graph.ResH / 4, graph.ResW, graph.ResH / 2);
                     }
                     else if (LNG == 1)
                     {
@@ -2298,7 +2310,7 @@ void person_update(Person *person)
                         graph_drawtext(64, 128 + 16, btl->b_save ? 128 : 63, 3, lod1, 1);
                         graph_drawtext(192, 128 + 16, !btl->b_save ? 128 : 63, 2, lod2, 1);
 
-                        graph_drawtile(0,graph.ResH / 4, graph.ResW, graph.ResH / 2);
+                        graph_drawtile(0, graph.ResH / 4, graph.ResW, graph.ResH / 2);
                     }
                 }
 
@@ -4852,6 +4864,154 @@ void person_update(Person *person)
         }
     }
 
+    if (person->dmgt)
+    {
+        person->dmgt_y += person->dmgt_speed;
+        if (person->dmgt_y > ((person->def_loc.vy + 48) / 2) + 128)
+        {
+            person->dmgt_y = ((person->def_loc.vy + 48) / 2) + 128;
+        }
+
+        if (person->dmgt_speed < 4)
+        {
+            person->dmgt_speed++;
+        }
+
+        u_char dmgt_t[9] = {0, 0, 0, 0, 0};
+        TextChar dmgt_tx[9];
+
+        for (u_char i = 0; i < 9; i++)
+        {
+            graph_inittext(&dmgt_tx[i]);
+            dmgt_tx[i].r = 63;
+            dmgt_tx[i].g = 63;
+            dmgt_tx[i].b = 63;
+        }
+
+        if (person->dmgt_c < 10)
+        {
+            dmgt_t[0] = 16 + (person->dmgt_c % 10);
+            dmgt_t[1] = 0;
+            dmgt_t[2] = 0;
+            dmgt_t[3] = 0;
+            dmgt_t[4] = 0;
+            dmgt_t[5] = 0;
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 100)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[1] = 16 + (person->dmgt_c % 10);
+            dmgt_t[2] = 0;
+            dmgt_t[3] = 0;
+            dmgt_t[4] = 0;
+            dmgt_t[5] = 0;
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 1000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[2] = 16 + (person->dmgt_c % 10);
+            dmgt_t[3] = 0;
+            dmgt_t[4] = 0;
+            dmgt_t[5] = 0;
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 10000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[3] = 16 + (person->dmgt_c % 10);
+            dmgt_t[4] = 0;
+            dmgt_t[5] = 0;
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 100000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 10000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[3] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[4] = 16 + (person->dmgt_c % 10);
+            dmgt_t[5] = 0;
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 1000000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 100000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 10000) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[3] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[4] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[5] = 16 + (person->dmgt_c % 10);
+            dmgt_t[6] = 0;
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 10000000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 1000000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 100000) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 10000) % 10);
+            dmgt_t[3] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[4] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[5] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[6] = 16 + (person->dmgt_c % 10);
+            dmgt_t[7] = 0;
+            dmgt_t[8] = 0;
+        }
+        else if (person->dmgt_c < 100000000)
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 10000000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 1000000) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 100000) % 10);
+            dmgt_t[3] = 16 + ((person->dmgt_c / 10000) % 10);
+            dmgt_t[4] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[5] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[6] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[7] = 16 + (person->dmgt_c % 10);
+            dmgt_t[8] = 0;
+        }
+        else
+        {
+            dmgt_t[0] = 16 + ((person->dmgt_c / 100000000) % 10);
+            dmgt_t[1] = 16 + ((person->dmgt_c / 10000000) % 10);
+            dmgt_t[2] = 16 + ((person->dmgt_c / 1000000) % 10);
+            dmgt_t[3] = 16 + ((person->dmgt_c / 100000) % 10);
+            dmgt_t[4] = 16 + ((person->dmgt_c / 10000) % 10);
+            dmgt_t[5] = 16 + ((person->dmgt_c / 1000) % 10);
+            dmgt_t[6] = 16 + ((person->dmgt_c / 100) % 10);
+            dmgt_t[7] = 16 + ((person->dmgt_c / 10) % 10);
+            dmgt_t[8] = 16 + (person->dmgt_c % 10);
+        }
+
+        graph_settext(dmgt_t, dmgt_tx, 9);
+
+        graph_drawtext(person->dmgt_x, person->dmgt_y, 128, 9, dmgt_tx, 256);
+
+        person->dmgt_tick++;
+
+        if (person->dmgt_tick > fps + (fps / 4))
+        {
+            person->dmgt_tick = 0;
+            person->dmgt_c = 0;
+            person->dmgt_speed = -4;
+            person->dmgt = FALSE;
+        }
+    }
+
     graph_drawsprite(person->spr, -1);
 }
 
@@ -4912,6 +5072,8 @@ void person_damage(Person *victim, Person *attacker, u_int dmg, u_char allow_dod
     {
         return;
     }
+
+    person->dmgt_c += dmg;
 
     if (!person->turn)
     {
