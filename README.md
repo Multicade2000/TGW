@@ -1,5 +1,5 @@
 # The Great Warriors - WIP
-**Be warned!!!** This game is WIP, as the Single Player mode is not working yet and only the Multiplayer mode is working!
+**Be warned!!!** This game is WIP, as the Single Player mode is not done yet and only the Multiplayer mode is playable!
 
 This game has been released for the PS1, it's a RPG game for PSYQ members!
 
