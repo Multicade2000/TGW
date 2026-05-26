@@ -5827,9 +5827,9 @@ void title_update(IntroTitle *title)
             {
             case 0:
             {
-                graph_drawtext(128, 224 - 48, title->opt == 0 ? 128 : 63, title->tsize01, title->opt1, 1);
-                graph_drawtext(128, 224 - 24, title->opt == 1 ? 128 : 63, title->tsize02, title->opt2, 1);
-                graph_drawtext(128, 224, title->opt == 2 ? 128 : 63, title->tsize03, title->opt3, 1);
+                graph_drawtext(128, 224 - 48, title->opt == 0 ? 128 : 63, title->tsize01, 0, title->opt1, 1);
+                graph_drawtext(128, 224 - 24, title->opt == 1 ? 128 : 63, title->tsize02, 0, title->opt2, 1);
+                graph_drawtext(128, 224, title->opt == 2 ? 128 : 63, title->tsize03, 0, title->opt3, 1);
 
                 graph_drawtile(32, 160, 192, 96);
                 break;
@@ -5941,21 +5941,21 @@ void title_update(IntroTitle *title)
                 }
                 }
 
-                graph_drawtext(128, 48, 128, title->tsize21, title->mp1, 1);
-                graph_drawtext(128, 72, title->opt == 0 || title->plr2 == 2 ? 128 : 63, title->tsize22, title->mp2, 1);
-                graph_drawtext(128, 96, title->opt == 1 || title->plr3 == 2 ? 128 : 63, title->tsize23, title->mp3, 1);
-                graph_drawtext(128, 120, title->opt == 2 || title->plr4 == 2 ? 128 : 63, title->tsize24, title->mp4, 1);
-                graph_drawtext(128, 224, title->opt == 3 ? 128 : 63, title->tsize25, title->mp5, 1);
+                graph_drawtext(32, 48, 128, title->tsize21, 1, title->mp1, 1);
+                graph_drawtext(32, 72, title->opt == 0 || title->plr2 == 2 ? 128 : 63, title->tsize22, 1, title->mp2, 1);
+                graph_drawtext(32, 96, title->opt == 1 || title->plr3 == 2 ? 128 : 63, title->tsize23, 1, title->mp3, 1);
+                graph_drawtext(32, 120, title->opt == 2 || title->plr4 == 2 ? 128 : 63, title->tsize24, 1, title->mp4, 1);
+                graph_drawtext(128, 224, title->opt == 3 ? 128 : 63, title->tsize25, 0, title->mp5, 1);
 
                 // graph_drawtile(32, 160, 192, 96);
                 break;
             }
             case 3:
             {
-                graph_drawtext(128, 128 - 28, 128, title->tsize31, title->lodm, 1);
-                graph_drawtext(128, 128 - 16, 128, title->tsize32, title->lodm2, 1);
-                graph_drawtext(64, 128 + 16, title->opt == 1 ? 128 : 63, title->tsize33, title->lod1, 1);
-                graph_drawtext(192, 128 + 16, title->opt == 0 ? 128 : 63, title->tsize34, title->lod2, 1);
+                graph_drawtext(128, 128 - 28, 128, title->tsize31, 0, title->lodm, 1);
+                graph_drawtext(128, 128 - 16, 128, title->tsize32, 0, title->lodm2, 1);
+                graph_drawtext(64, 128 + 16, title->opt == 1 ? 128 : 63, title->tsize33, 0, title->lod1, 1);
+                graph_drawtext(192, 128 + 16, title->opt == 0 ? 128 : 63, title->tsize34, 0, title->lod2, 1);
 
                 break;
             }
@@ -5974,9 +5974,9 @@ void title_update(IntroTitle *title)
                     title->mus1[7].char_id = 16 + (title->mus_track == 0 ? 0 : title->mus_track / 100);
                 }
 
-                graph_drawtext(128, 224 - 48, title->opt == 0 ? 128 : 63, title->tsize2531, title->mus1, 1);
-                graph_drawtext(128, 224 - 24, title->opt == 1 ? 128 : 63, title->tsize2532, title->mus2, 1);
-                graph_drawtext(128, 224, title->opt == 2 ? 128 : 63, title->tsize2533, title->mus3, 1);
+                graph_drawtext(128, 224 - 48, title->opt == 0 ? 128 : 63, title->tsize2531, 0, title->mus1, 1);
+                graph_drawtext(128, 224 - 24, title->opt == 1 ? 128 : 63, title->tsize2532, 0, title->mus2, 1);
+                graph_drawtext(128, 224, title->opt == 2 ? 128 : 63, title->tsize2533, 0, title->mus3, 1);
 
                 graph_drawtile(32, 160, 192, 96);
                 break;

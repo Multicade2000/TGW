@@ -86,7 +86,7 @@ void graph_disp()
 {
     DrawSync(0);
 
-    while(!graph_vsync())
+    while (!graph_vsync())
     {
         VSync(0);
     }
@@ -507,7 +507,7 @@ void graph_drawback(u_short tp, u_short cl)
     graph.nextpri += sizeof(DR_TPAGE);
 }
 
-void graph_drawtext(int x, int y, u_char alpha, u_int size, TextChar *text, long OTz)
+void graph_drawtext(int x, int y, u_char alpha, u_int size, u_char align, TextChar *text, long OTz)
 {
     if (size <= 0)
         return;
@@ -526,73 +526,229 @@ void graph_drawtext(int x, int y, u_char alpha, u_int size, TextChar *text, long
 
     int a = x - (len / 2);
 
-    while (a < len + x - (len / 2))
+    if (align == 1)
     {
-        SPRT *sprt;
-        DR_TPAGE *tpage;
+        a = x;
+    }
+    else if (align == 2)
+    {
+        a = x - len;
+    }
 
-        sprt = (SPRT *)graph.nextpri;
-        setSprt(sprt);
-
-        int u = text[i].u;
-        int v = text[i].v;
-
-        for (int b = 0; b < text[i].char_id; b++)
+    if (align == 0)
+    {
+        while (a < len + x - (len / 2))
         {
-            u += text[i].w;
+            SPRT *sprt;
+            DR_TPAGE *tpage;
 
-            if (u >= text[i].mw)
+            sprt = (SPRT *)graph.nextpri;
+            setSprt(sprt);
+
+            int u = text[i].u;
+            int v = text[i].v;
+
+            for (int b = 0; b < text[i].char_id; b++)
             {
-                u = 0;
-                v += text[i].h;
+                u += text[i].w;
+
+                if (u >= text[i].mw)
+                {
+                    u = 0;
+                    v += text[i].h;
+                }
+
+                if (v >= text[i].mh)
+                {
+                    return;
+                }
             }
 
-            if (v >= text[i].mh)
-            {
-                return;
-            }
-        }
+            setXY0(sprt, a, y - (text[i].h / 2));
+            setWH(sprt, text[i].w, text[i].h);
+            setUV0(sprt, u, v);
 
-        setXY0(sprt, a, y - (text[i].h / 2));
-        setWH(sprt, text[i].w, text[i].h);
-        setUV0(sprt, u, v);
-
-        if (graph.scr_fade > 0)
-        {
-            if (alpha >= 128)
+            if (graph.scr_fade > 0)
             {
-                setRGB0(sprt,
-                        (u_char)(((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7),
-                        (u_char)(((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7),
-                        (u_char)(((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7));
+                if (alpha >= 128)
+                {
+                    setRGB0(sprt,
+                            (u_char)(((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7));
+                }
+                else
+                {
+                    setRGB0(sprt, (u_char)(((((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7));
+                }
             }
             else
             {
-                setRGB0(sprt, (u_char)(((((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7));
+                setRGB0(sprt, 0, 0, 0);
+            }
+
+            sprt->clut = text[i].clut;
+
+            addPrim(graph.ot[graph.db][OTz], sprt);
+            setSemiTrans(sprt, alpha >= 128 ? 0 : 1);
+            graph.nextpri += sizeof(SPRT);
+
+            tpage = (DR_TPAGE *)graph.nextpri;
+            setDrawTPage(tpage, 0, 1, getTPage(0, alpha >= 128 ? 0 : 1, text[i].tpage_x, text[i].tpage_y));
+            addPrim(graph.ot[graph.db][OTz], tpage);
+
+            graph.nextpri += sizeof(DR_TPAGE);
+
+            a += text[i].w;
+
+            if (i < size - 1)
+            {
+                i++;
             }
         }
-        else
+    }
+    else if (align == 1)
+    {
+        while (a < len + x)
         {
-            setRGB0(sprt, 0, 0, 0);
+            SPRT *sprt;
+            DR_TPAGE *tpage;
+
+            sprt = (SPRT *)graph.nextpri;
+            setSprt(sprt);
+
+            int u = text[i].u;
+            int v = text[i].v;
+
+            for (int b = 0; b < text[i].char_id; b++)
+            {
+                u += text[i].w;
+
+                if (u >= text[i].mw)
+                {
+                    u = 0;
+                    v += text[i].h;
+                }
+
+                if (v >= text[i].mh)
+                {
+                    return;
+                }
+            }
+
+            setXY0(sprt, a, y - (text[i].h / 2));
+            setWH(sprt, text[i].w, text[i].h);
+            setUV0(sprt, u, v);
+
+            if (graph.scr_fade > 0)
+            {
+                if (alpha >= 128)
+                {
+                    setRGB0(sprt,
+                            (u_char)(((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7));
+                }
+                else
+                {
+                    setRGB0(sprt, (u_char)(((((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7));
+                }
+            }
+            else
+            {
+                setRGB0(sprt, 0, 0, 0);
+            }
+
+            sprt->clut = text[i].clut;
+
+            addPrim(graph.ot[graph.db][OTz], sprt);
+            setSemiTrans(sprt, alpha >= 128 ? 0 : 1);
+            graph.nextpri += sizeof(SPRT);
+
+            tpage = (DR_TPAGE *)graph.nextpri;
+            setDrawTPage(tpage, 0, 1, getTPage(0, alpha >= 128 ? 0 : 1, text[i].tpage_x, text[i].tpage_y));
+            addPrim(graph.ot[graph.db][OTz], tpage);
+
+            graph.nextpri += sizeof(DR_TPAGE);
+
+            a += text[i].w;
+
+            if (i < size - 1)
+            {
+                i++;
+            }
         }
-        
-        sprt->clut = text[i].clut;
-
-        addPrim(graph.ot[graph.db][OTz], sprt);
-        setSemiTrans(sprt, alpha >= 128 ? 0 : 1);
-        graph.nextpri += sizeof(SPRT);
-
-        tpage = (DR_TPAGE *)graph.nextpri;
-        setDrawTPage(tpage, 0, 1, getTPage(0, alpha >= 128 ? 0 : 1, text[i].tpage_x, text[i].tpage_y));
-        addPrim(graph.ot[graph.db][OTz], tpage);
-
-        graph.nextpri += sizeof(DR_TPAGE);
-
-        a += text[i].w;
-
-        if (i < size - 1)
+    }
+    else if (align == 2)
+    {
+        while (a < x)
         {
-            i++;
+            SPRT *sprt;
+            DR_TPAGE *tpage;
+
+            sprt = (SPRT *)graph.nextpri;
+            setSprt(sprt);
+
+            int u = text[i].u;
+            int v = text[i].v;
+
+            for (int b = 0; b < text[i].char_id; b++)
+            {
+                u += text[i].w;
+
+                if (u >= text[i].mw)
+                {
+                    u = 0;
+                    v += text[i].h;
+                }
+
+                if (v >= text[i].mh)
+                {
+                    return;
+                }
+            }
+
+            setXY0(sprt, a, y - (text[i].h / 2));
+            setWH(sprt, text[i].w, text[i].h);
+            setUV0(sprt, u, v);
+
+            if (graph.scr_fade > 0)
+            {
+                if (alpha >= 128)
+                {
+                    setRGB0(sprt,
+                            (u_char)(((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7),
+                            (u_char)(((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7));
+                }
+                else
+                {
+                    setRGB0(sprt, (u_char)(((((unsigned short)text[i].r * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].g * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7), (u_char)(((((unsigned short)text[i].b * (unsigned short)graph.scr_fade + 64) >> 7) * (unsigned short)alpha + 64) >> 7));
+                }
+            }
+            else
+            {
+                setRGB0(sprt, 0, 0, 0);
+            }
+
+            sprt->clut = text[i].clut;
+
+            addPrim(graph.ot[graph.db][OTz], sprt);
+            setSemiTrans(sprt, alpha >= 128 ? 0 : 1);
+            graph.nextpri += sizeof(SPRT);
+
+            tpage = (DR_TPAGE *)graph.nextpri;
+            setDrawTPage(tpage, 0, 1, getTPage(0, alpha >= 128 ? 0 : 1, text[i].tpage_x, text[i].tpage_y));
+            addPrim(graph.ot[graph.db][OTz], tpage);
+
+            graph.nextpri += sizeof(DR_TPAGE);
+
+            a += text[i].w;
+
+            if (i < size - 1)
+            {
+                i++;
+            }
         }
     }
 }

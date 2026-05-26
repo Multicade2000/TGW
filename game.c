@@ -313,8 +313,8 @@ void game_init()
             graph_drawsprite(ro, -1);
             graph_drawsprite(en, -1);
 
-            graph_drawtext(128 + 64, 64, LNG == 0 ? 128 : 64, 6, ro_t, 1);
-            graph_drawtext(128 + 64, 256 - 64, LNG == 1 ? 128 : 64, 7, en_t, 1);
+            graph_drawtext(224, 64, LNG == 0 ? 128 : 64, 6, 2, ro_t, 1);
+            graph_drawtext(224, 256 - 64, LNG == 1 ? 128 : 64, 7, 2, en_t, 1);
 
             PlayerCtrl ctrl = controller_getplayer(0);
 

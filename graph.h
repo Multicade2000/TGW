@@ -70,7 +70,7 @@ void graph_drawsprite(Sprite spr, long OTx);
 void graph_drawmodel(Model mdl, VECTOR Trans, SVECTOR Rotate, VECTOR Scale);
 void graph_loadclut(CCLUT *clut, short x, short y, int max_clut);
 void graph_drawback(u_short tp, u_short cl);
-void graph_drawtext(int x, int y, u_char alpha, u_int size, TextChar *text, long OTz);
+void graph_drawtext(int x, int y, u_char alpha, u_int size, u_char align, TextChar *text, long OTz);
 void graph_inittext(TextChar* charer);
 void graph_settext(const u_char *text, TextChar *charer, u_int size);
 void graph_drawtile(int x, int y, int w, int h);
