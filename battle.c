@@ -2124,9 +2124,9 @@ void person_update(Person *person)
                         u_char opt2 = vis + 1;
                         u_char opt3 = vis + 2;
 
-                        graph_drawtext(0, 224 - 48, person->action[1] == vis ? 128 : ((opt1 != 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis]) || (opt1 == 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis] && person->shd_mode) ? 63 : (person->spell[vis] ? 31 : 0)), 16, 1, opt[vis], 1);
-                        graph_drawtext(0, 224 - 24, person->action[1] == vis + 1 ? 128 : ((opt2 != 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1]) || (opt2 == 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1] && person->shd_mode) ? 63 : (person->spell[vis + 1] ? 31 : 0)), 16, 1, opt[vis + 1], 1);
-                        graph_drawtext(0, 224, person->action[1] == vis + 2 ? 128 : ((opt3 != 4 && person->spell[vis + 2] && person->mp >= btl->spell_cost[vis + 2] * person->spell_rank[vis + 2]) || (opt3 == 4 && person->spell[vis + 2] && person->mp >= btl->spell_cost[vis + 2] * person->spell_rank[vis + 2] && person->shd_mode) ? 63 : (person->spell[vis + 2] ? 31 : 0)), 16, 1, opt[vis + 2], 1);
+                        graph_drawtext(4, 224 - 48, person->action[1] == vis ? 128 : ((opt1 != 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis]) || (opt1 == 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis] && person->shd_mode) ? 63 : (person->spell[vis] ? 31 : 0)), 16, 1, opt[vis], 1);
+                        graph_drawtext(4, 224 - 24, person->action[1] == vis + 1 ? 128 : ((opt2 != 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1]) || (opt2 == 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1] && person->shd_mode) ? 63 : (person->spell[vis + 1] ? 31 : 0)), 16, 1, opt[vis + 1], 1);
+                        graph_drawtext(4, 224, person->action[1] == vis + 2 ? 128 : ((opt3 != 4 && person->spell[vis + 2] && person->mp >= btl->spell_cost[vis + 2] * person->spell_rank[vis + 2]) || (opt3 == 4 && person->spell[vis + 2] && person->mp >= btl->spell_cost[vis + 2] * person->spell_rank[vis + 2] && person->shd_mode) ? 63 : (person->spell[vis + 2] ? 31 : 0)), 16, 1, opt[vis + 2], 1);
 
                         graph_drawtext(256, 224 - 48, person->action[1] == vis ? 128 : ((opt1 != 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis]) || (opt1 == 4 && person->spell[vis] && person->mp >= btl->spell_cost[vis] * person->spell_rank[vis] && person->shd_mode) ? 63 : (person->spell[vis] ? 31 : 0)), cost_sz[vis], 2, cost[vis], 1);
                         graph_drawtext(256, 224 - 24, person->action[1] == vis + 1 ? 128 : ((opt2 != 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1]) || (opt2 == 4 && person->spell[vis + 1] && person->mp >= btl->spell_cost[vis + 1] * person->spell_rank[vis + 1] && person->shd_mode) ? 63 : (person->spell[vis + 1] ? 31 : 0)), cost_sz[vis + 1], 2, cost[vis + 1], 1);
@@ -2216,9 +2216,9 @@ void person_update(Person *person)
                             graph_settext(mgc[i], cost[i], cost_sz[i]);
                         }
 
-                        graph_drawtext(0, 224 - 48, person->action[1] == 0 ? 128 : (person->pot[0] > 0 && person->hp != person->max_hp ? 63 : (person->pot[0] > 0 ? 31 : 0)), 16, 1, opt[0], 1);
-                        graph_drawtext(0, 224 - 24, person->action[1] == 1 ? 128 : (person->pot[1] > 0 && person->mp != person->max_mp ? 63 : (person->pot[1] > 0 ? 31 : 0)), 16, 1, opt[1], 1);
-                        graph_drawtext(0, 224, person->action[1] == 2 ? 128 : (person->pot[2] > 0 && (person->hp != person->max_hp || person->mp != person->max_mp) ? 63 : (person->pot[2] > 0 ? 31 : 0)), 16, 1, opt[2], 1);
+                        graph_drawtext(4, 224 - 48, person->action[1] == 0 ? 128 : (person->pot[0] > 0 && person->hp != person->max_hp ? 63 : (person->pot[0] > 0 ? 31 : 0)), 16, 1, opt[0], 1);
+                        graph_drawtext(4, 224 - 24, person->action[1] == 1 ? 128 : (person->pot[1] > 0 && person->mp != person->max_mp ? 63 : (person->pot[1] > 0 ? 31 : 0)), 16, 1, opt[1], 1);
+                        graph_drawtext(4, 224, person->action[1] == 2 ? 128 : (person->pot[2] > 0 && (person->hp != person->max_hp || person->mp != person->max_mp) ? 63 : (person->pot[2] > 0 ? 31 : 0)), 16, 1, opt[2], 1);
 
                         graph_drawtext(256, 224 - 48, person->action[1] == 0 ? 128 : (person->pot[0] > 0 && person->hp != person->max_hp ? 63 : (person->pot[0] > 0 ? 31 : 0)), cost_sz[0], 2, cost[0], 1);
                         graph_drawtext(256, 224 - 24, person->action[1] == 1 ? 128 : (person->pot[1] > 0 && person->mp != person->max_mp ? 63 : (person->pot[1] > 0 ? 31 : 0)), cost_sz[1], 2, cost[1], 1);
