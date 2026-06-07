@@ -5,6 +5,7 @@ GameGraph graph;
 void graph_init(int code)
 {
     graph.last_vsync = 0;
+    graph.delta = 1;
 
     if (code == 0)
     {
@@ -810,6 +811,7 @@ u_char graph_vsync()
 
     if (current_vsync - graph.last_vsync >= 1)
     {
+        graph.delta = current_vsync - graph.last_vsync;
         graph.last_vsync = current_vsync;
 
         return 1;

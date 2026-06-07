@@ -5,6 +5,7 @@ FX *fire;
 
 void battle_init(SceneBattle *battle)
 {
+    graph.last_vsync = VSync(-1);
     battle->people = NULL;
     battle->b_save = FALSE;
     battle->fx = NULL;
@@ -104,9 +105,13 @@ void battle_update(SceneBattle *battle)
 
     if (!battle->reverse)
     {
-        if (graph.scr_fade < 128)
+        if (graph.scr_fade < 128 - graph.delta)
         {
-            graph.scr_fade += 2;
+            graph.scr_fade += 2 * graph.delta;
+        }
+        else
+        {
+            graph.scr_fade = 128;
         }
         // else
         // {
@@ -116,12 +121,13 @@ void battle_update(SceneBattle *battle)
     }
     else
     {
-        if (graph.scr_fade > 0)
+        if (graph.scr_fade > 0 + graph.delta)
         {
-            graph.scr_fade -= 2;
+            graph.scr_fade -= 2 * graph.delta;
         }
         else
         {
+            graph.scr_fade = 0;
             if (battle->retry)
             {
                 battle->reverse = !battle->reverse;
@@ -334,6 +340,8 @@ void person_init(Person *person)
                     {
                         controller_vibrate(person->ctrl.porter);
                         DATALOAD load = memcard_load(person->ctrl.porter, REGION_CODE, 1);
+
+                        graph.last_vsync = VSync(-1);
 
                         if (load.load)
                         {
@@ -714,7 +722,7 @@ void person_update(Person *person)
 
     if (person->alive)
     {
-        person->tick++;
+        person->tick += graph.delta;
 
         if (person->tick >= person->max_tick)
         {
@@ -887,7 +895,7 @@ void person_update(Person *person)
     }
     else
     {
-        person->tick++;
+        person->tick += graph.delta;
 
         if (person->tick >= 10 && person->spr.alpha > 63)
         {
@@ -916,7 +924,7 @@ void person_update(Person *person)
 
         if (person->spr.alpha > 0)
         {
-            person->spr.alpha--;
+            person->spr.alpha -= graph.delta;
         }
         else
         {
@@ -1899,6 +1907,7 @@ void person_update(Person *person)
                                                 data.data.spell_rank[9] = btl->people[i].spell_rank[9];
 
                                                 memcard_save(btl->people[i].ctrl.porter, &data, REGION_CODE, 1);
+                                                graph.last_vsync = VSync(-1);
                                             }
                                         }
                                     }
@@ -2653,8 +2662,8 @@ void person_update(Person *person)
                         forward.vx = csin(rot);
                         forward.vy = ccos(rot);
 
-                        person->spr.MovVector.vx -= (forward.vx * 4) >> 12;
-                        person->spr.MovVector.vy -= (forward.vy * 4) >> 12;
+                        person->spr.MovVector.vx -= ((forward.vx * 4) * graph.delta) >> 12;
+                        person->spr.MovVector.vy -= ((forward.vy * 4) * graph.delta) >> 12;
 
                         if (dis < 32)
                         {
@@ -2674,7 +2683,7 @@ void person_update(Person *person)
                                 person->anim = 2;
                             }
 
-                            person->act_tick++;
+                            person->act_tick += graph.delta;
                         }
                         else
                         {
@@ -2715,8 +2724,8 @@ void person_update(Person *person)
                             forward.vx = csin(rot);
                             forward.vy = ccos(rot);
 
-                            person->spr.MovVector.vx -= (forward.vx * 4) >> 12;
-                            person->spr.MovVector.vy -= (forward.vy * 4) >> 12;
+                            person->spr.MovVector.vx -= ((forward.vx * 4) * graph.delta) >> 12;
+                            person->spr.MovVector.vy -= ((forward.vy * 4) * graph.delta) >> 12;
 
                             if (dis < 2)
                             {
@@ -2749,7 +2758,7 @@ void person_update(Person *person)
                                 }
                             }
 
-                            person->act_tick++;
+                            person->act_tick += graph.delta;
                         }
                         else
                         {
@@ -2778,7 +2787,7 @@ void person_update(Person *person)
                 {
                     if (person->act_tick < fps * 2)
                     {
-                        person->act_tick++;
+                        person->act_tick += graph.delta;
 
                         if (!person->shd_mode)
                         {
@@ -2853,7 +2862,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -2896,7 +2905,7 @@ void person_update(Person *person)
                                     person->act_count++;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -2922,7 +2931,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -2981,7 +2990,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3020,7 +3029,7 @@ void person_update(Person *person)
                                     person->poison = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3041,7 +3050,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3100,7 +3109,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3147,7 +3156,7 @@ void person_update(Person *person)
                                     }
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3168,7 +3177,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3236,7 +3245,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3277,7 +3286,7 @@ void person_update(Person *person)
                                     person->act_count++;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3303,7 +3312,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3362,7 +3371,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3400,7 +3409,7 @@ void person_update(Person *person)
                                     person->shd_mana = 5 * person->spell_rank[person->action[1]];
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3421,7 +3430,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3489,7 +3498,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3541,7 +3550,7 @@ void person_update(Person *person)
                                     btl->people[person->action[2]].regen = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3562,7 +3571,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3662,7 +3671,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3689,7 +3698,7 @@ void person_update(Person *person)
                                     sound_playsfx(&sfx[22], 15, 0x0000, FALSE, 255, 255);
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
 
                             person->target.vx = btl->people[person->action[2]].def_loc.vx;
@@ -3730,8 +3739,8 @@ void person_update(Person *person)
                             forward.vx = csin(rot);
                             forward.vy = ccos(rot);
 
-                            person->spr.MovVector.vx -= (forward.vx * 8) >> 12;
-                            person->spr.MovVector.vy -= (forward.vy * 8) >> 12;
+                            person->spr.MovVector.vx -= ((forward.vx * 8) * graph.delta) >> 12;
+                            person->spr.MovVector.vy -= ((forward.vy * 8) * graph.delta) >> 12;
 
                             if (dis < 32)
                             {
@@ -3753,7 +3762,7 @@ void person_update(Person *person)
                                     person->act_count++;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3799,8 +3808,8 @@ void person_update(Person *person)
                                 forward.vx = csin(rot);
                                 forward.vy = ccos(rot);
 
-                                person->spr.MovVector.vx -= (forward.vx * 4) >> 12;
-                                person->spr.MovVector.vy -= (forward.vy * 4) >> 12;
+                                person->spr.MovVector.vx -= ((forward.vx * 4) * graph.delta) >> 12;
+                                person->spr.MovVector.vy -= ((forward.vy * 4) * graph.delta) >> 12;
 
                                 if (dis < 2)
                                 {
@@ -3833,7 +3842,7 @@ void person_update(Person *person)
                                     }
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3892,7 +3901,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3939,7 +3948,7 @@ void person_update(Person *person)
                                     }
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -3960,7 +3969,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4019,7 +4028,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4066,7 +4075,7 @@ void person_update(Person *person)
                                     }
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4087,7 +4096,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4155,7 +4164,7 @@ void person_update(Person *person)
                                     person->spell_used[person->action[1]] = TRUE;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4198,7 +4207,7 @@ void person_update(Person *person)
                                     person->act_count++;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4224,7 +4233,7 @@ void person_update(Person *person)
                                     person->anim = 0;
                                 }
 
-                                person->act_tick++;
+                                person->act_tick += graph.delta;
                             }
                             else
                             {
@@ -4255,7 +4264,7 @@ void person_update(Person *person)
                 {
                     if (person->act_tick < fps * 2)
                     {
-                        person->act_tick++;
+                        person->act_tick += graph.delta;
 
                         if (person->action[1] == 0 && person->hp != person->max_hp)
                         {
@@ -4324,7 +4333,7 @@ void person_update(Person *person)
                         }
                     }
 
-                    person->act_tick++;
+                    person->act_tick += graph.delta;
                 }
                 else
                 {
@@ -4878,7 +4887,7 @@ void person_update(Person *person)
 
     if (person->dmgt)
     {
-        person->dmgt_y += person->dmgt_speed;
+        person->dmgt_y += person->dmgt_speed * graph.delta;
         if (person->dmgt_y > ((person->def_loc.vy + 48) / 2) + 128)
         {
             person->dmgt_y = ((person->def_loc.vy + 48) / 2) + 128;
@@ -4886,7 +4895,7 @@ void person_update(Person *person)
 
         if (person->dmgt_speed < 4)
         {
-            person->dmgt_speed++;
+            person->dmgt_speed += graph.delta;
         }
 
         u_char dmgt_t[9] = {0, 0, 0, 0, 0};
@@ -5024,9 +5033,9 @@ void person_update(Person *person)
 
         graph_drawtext(person->dmgt_x, person->dmgt_y, 128, dmgt_sz, 0, dmgt_tx, 1);
 
-        person->dmgt_tick++;
+        person->dmgt_tick += graph.delta;
 
-        if (person->dmgt_tick > fps + (fps / 4))
+        if (person->dmgt_tick > (fps * 2) + (fps / 2))
         {
             person->dmgt_tick = 0;
             person->dmgt_c = 0;
@@ -5094,6 +5103,14 @@ void person_damage(Person *victim, Person *attacker, u_int dmg, u_char allow_dod
     if (dmg <= 0)
     {
         return;
+    }
+
+    if (person->dmgt)
+    {
+        person->dmgt_tick = 0;
+        person->dmgt_c = 0;
+        person->dmgt_speed = -4;
+        person->dmgt = FALSE;
     }
 
     person->dmgt_c += dmg;
@@ -5397,8 +5414,8 @@ void fx_update(FX *fx)
         forward.vx = csin(rot);
         forward.vy = ccos(rot);
 
-        fx->spr.MovVector.vx -= (forward.vx * 4) >> 12;
-        fx->spr.MovVector.vy -= (forward.vy * 4) >> 12;
+        fx->spr.MovVector.vx -= ((forward.vx * 4) * graph.delta) >> 12;
+        fx->spr.MovVector.vy -= ((forward.vy * 4) * graph.delta) >> 12;
 
         if (dis < 32)
         {
@@ -5423,18 +5440,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5448,18 +5465,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5487,12 +5504,11 @@ void fx_update(FX *fx)
 
             fx->spr.RotVector.vz = rot;
 
-            fx->tick++;
+            fx->tick += graph.delta;
         }
         else
         {
             fx->active = FALSE;
-            ;
         }
         break;
     }
@@ -5514,8 +5530,8 @@ void fx_update(FX *fx)
         forward.vx = csin(rot);
         forward.vy = ccos(rot);
 
-        fx->spr.MovVector.vx -= (forward.vx * 4) >> 12;
-        fx->spr.MovVector.vy -= (forward.vy * 4) >> 12;
+        fx->spr.MovVector.vx -= ((forward.vx * 4) * graph.delta) >> 12;
+        fx->spr.MovVector.vy -= ((forward.vy * 4) * graph.delta) >> 12;
 
         if (dis < 32)
         {
@@ -5540,18 +5556,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5565,18 +5581,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5595,18 +5611,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5620,18 +5636,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5650,18 +5666,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5675,18 +5691,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5705,18 +5721,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5730,18 +5746,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5760,18 +5776,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5785,18 +5801,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5815,18 +5831,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5840,18 +5856,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {
@@ -5870,18 +5886,18 @@ void fx_update(FX *fx)
     {
         if (!fx->reverse)
         {
-            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vx < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx += 2048;
+                fx->spr.ScaleVector.vx += 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = (ONE * 8) - 1;
             }
 
-            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048)
+            if (fx->spr.ScaleVector.vy < ((ONE * 8) - 1) - 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy += 2048;
+                fx->spr.ScaleVector.vy += 2048 * graph.delta;
             }
             else
             {
@@ -5895,18 +5911,18 @@ void fx_update(FX *fx)
         }
         else
         {
-            if (fx->spr.ScaleVector.vx > 2048)
+            if (fx->spr.ScaleVector.vx > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vx -= 2048;
+                fx->spr.ScaleVector.vx -= 2048 * graph.delta;
             }
             else
             {
                 fx->spr.ScaleVector.vx = 0;
             }
 
-            if (fx->spr.ScaleVector.vy > 2048)
+            if (fx->spr.ScaleVector.vy > 2048 * graph.delta)
             {
-                fx->spr.ScaleVector.vy -= 2048;
+                fx->spr.ScaleVector.vy -= 2048 * graph.delta;
             }
             else
             {

@@ -1,5 +1,6 @@
 #include "cdrom.h"
 #include "region.h"
+#include "graph.h"
 
 GameCD disc;
 
@@ -121,11 +122,11 @@ void cdrom_xaupdate()
     {
         if (REGION_CODE != 0)
         {
-            disc.cur_pos += disc.doubleSpeed ? 8 : 4;
+            disc.cur_pos += (disc.doubleSpeed ? 8 : 4) * graph.delta;
         }
         else
         {
-            disc.cur_pos += disc.doubleSpeed ? 10 : 5;
+            disc.cur_pos += (disc.doubleSpeed ? 10 : 5) * graph.delta;
         }
         if (disc.cur_pos >= disc.pos_end)
         {

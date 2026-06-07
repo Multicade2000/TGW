@@ -37,6 +37,7 @@ typedef struct
     u_char scr_fade;
 
     int last_vsync;
+    int delta;
 } GameGraph;
 
 typedef struct

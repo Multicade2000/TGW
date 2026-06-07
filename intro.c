@@ -3,6 +3,7 @@
 
 void intro_init(IntroModel *intro)
 {
+    graph.last_vsync = VSync(-1);
     graph.scr_fade = 128;
 
     intro->mov.vx = 0;
@@ -148,7 +149,7 @@ void intro_update(IntroModel *intro)
 {
     if (intro->rot.vy > -ONE)
     {
-        intro->rot.vy -= REGION_CODE != 0 ? 16 : 20;
+        intro->rot.vy -= (REGION_CODE != 0 ? 16 : 20) * graph.delta;
     }
     else
     {
@@ -157,7 +158,7 @@ void intro_update(IntroModel *intro)
 
     if (intro->mov.vz > 512)
     {
-        intro->mov.vz -= REGION_CODE != 0 ? 3 : 4;
+        intro->mov.vz -= (REGION_CODE != 0 ? 3 : 4) * graph.delta;
     }
     else
     {
@@ -172,7 +173,7 @@ void intro_update(IntroModel *intro)
         {
             if (intro->spr[i].alpha < 128)
             {
-                intro->spr[i].alpha++;
+                intro->spr[i].alpha += graph.delta;
             }
             else
             {
@@ -188,7 +189,7 @@ void intro_update(IntroModel *intro)
 
     if (intro->tick < (fps * 9) - (fps / 2))
     {
-        intro->tick++;
+        intro->tick += graph.delta;
     }
     else
     {
@@ -198,6 +199,7 @@ void intro_update(IntroModel *intro)
 
 void circus_init(IntroCircus *circ)
 {
+    graph.last_vsync = VSync(-1);
     graph.scr_fade = 128;
 
     circ->edge.alpha = 0;
@@ -782,7 +784,7 @@ void circus_update(IntroCircus *circ)
     {
         if (circ->edge.alpha < 128)
         {
-            circ->edge.alpha += 2;
+            circ->edge.alpha += 2 * graph.delta;
         }
         else
         {
@@ -796,7 +798,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 2)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -813,7 +815,7 @@ void circus_update(IntroCircus *circ)
     {
         if (circ->diama.alpha < 128)
         {
-            circ->diama.alpha += 2;
+            circ->diama.alpha += 2 * graph.delta;
         }
         else
         {
@@ -838,7 +840,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 3)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -864,10 +866,10 @@ void circus_update(IntroCircus *circ)
         {
         case 0:
         {
-            circ->number[0].MovVector.vy -= 16;
-            circ->number[1].MovVector.vy -= 16;
-            circ->number[2].MovVector.vy -= 16;
-            circ->number[3].MovVector.vy -= 16;
+            circ->number[0].MovVector.vy -= 16 * graph.delta;
+            circ->number[1].MovVector.vy -= 16 * graph.delta;
+            circ->number[2].MovVector.vy -= 16 * graph.delta;
+            circ->number[3].MovVector.vy -= 16 * graph.delta;
 
             if (circ->number[0].MovVector.vy <= 0 && circ->number[1].MovVector.vy <= 0 && circ->number[2].MovVector.vy <= 0 && circ->number[3].MovVector.vy <= 0)
             {
@@ -883,10 +885,10 @@ void circus_update(IntroCircus *circ)
         }
         case 1:
         {
-            circ->number[0].MovVector.vx -= 16;
-            circ->number[1].MovVector.vx -= 16;
-            circ->number[2].MovVector.vx += 16;
-            circ->number[3].MovVector.vx += 16;
+            circ->number[0].MovVector.vx -= 16 * graph.delta;
+            circ->number[1].MovVector.vx -= 16 * graph.delta;
+            circ->number[2].MovVector.vx += 16 * graph.delta;
+            circ->number[3].MovVector.vx += 16 * graph.delta;
 
             if (circ->number[0].MovVector.vx <= -128)
             {
@@ -916,19 +918,19 @@ void circus_update(IntroCircus *circ)
         {
             if (circ->number[0].alpha > 0)
             {
-                circ->number[0].alpha -= 4;
+                circ->number[0].alpha -= 4 * graph.delta;
                 circ->number[0].tpage = getTPage(0, 0, 320, 0);
             }
 
             if (circ->number[3].alpha > 0)
             {
-                circ->number[3].alpha -= 4;
+                circ->number[3].alpha -= 4 * graph.delta;
                 circ->number[3].tpage = getTPage(0, 0, 320, 0);
             }
 
             if (circ->edge.alpha < 128)
             {
-                circ->edge.alpha += 4;
+                circ->edge.alpha += 4 * graph.delta;
             }
             else
             {
@@ -938,7 +940,7 @@ void circus_update(IntroCircus *circ)
 
             if (circ->diama.alpha < 128)
             {
-                circ->diama.alpha += 4;
+                circ->diama.alpha += 4 * graph.delta;
             }
             else
             {
@@ -960,7 +962,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 2)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -976,8 +978,8 @@ void circus_update(IntroCircus *circ)
         {
         case 0:
         {
-            circ->king.ScaleVector.vy += 256;
-            circ->king.MovVector.vy -= 8;
+            circ->king.ScaleVector.vy += 256 * graph.delta;
+            circ->king.MovVector.vy -= 8 * graph.delta;
 
             if (circ->king.MovVector.vy < 0)
             {
@@ -1000,8 +1002,8 @@ void circus_update(IntroCircus *circ)
         {
             if (LNG == 1)
             {
-                circ->king_text[0].ScaleVector.vx += 512;
-                circ->king_text[0].ScaleVector.vy += 512;
+                circ->king_text[0].ScaleVector.vx += 512 * graph.delta;
+                circ->king_text[0].ScaleVector.vy += 512 * graph.delta;
 
                 if (circ->king_text[0].ScaleVector.vx > ONE * 2)
                 {
@@ -1020,8 +1022,8 @@ void circus_update(IntroCircus *circ)
             }
             else if (LNG == 0)
             {
-                circ->king_text[0].ScaleVector.vx += 512;
-                circ->king_text[0].ScaleVector.vy += 512;
+                circ->king_text[0].ScaleVector.vx += 512 * graph.delta;
+                circ->king_text[0].ScaleVector.vy += 512 * graph.delta;
 
                 if (circ->king_text[0].ScaleVector.vx > ONE * 4)
                 {
@@ -1045,8 +1047,8 @@ void circus_update(IntroCircus *circ)
         {
             if (LNG == 1)
             {
-                circ->king_text[1].ScaleVector.vx += 1024;
-                circ->king_text[1].ScaleVector.vy += 1024;
+                circ->king_text[1].ScaleVector.vx += 1024 * graph.delta;
+                circ->king_text[1].ScaleVector.vy += 1024 * graph.delta;
 
                 if (circ->king_text[1].ScaleVector.vx > ONE * 4)
                 {
@@ -1065,8 +1067,8 @@ void circus_update(IntroCircus *circ)
             }
             else if (LNG == 0)
             {
-                circ->king_text[1].ScaleVector.vx += 512;
-                circ->king_text[1].ScaleVector.vy += 512;
+                circ->king_text[1].ScaleVector.vx += 512 * graph.delta;
+                circ->king_text[1].ScaleVector.vy += 512 * graph.delta;
 
                 if (circ->king_text[1].ScaleVector.vx > ONE * 4)
                 {
@@ -1088,8 +1090,8 @@ void circus_update(IntroCircus *circ)
         }
         case 3:
         {
-            circ->king_text[2].ScaleVector.vx += 512;
-            circ->king_text[2].ScaleVector.vy += 512;
+            circ->king_text[2].ScaleVector.vx += 512 * graph.delta;
+            circ->king_text[2].ScaleVector.vy += 512 * graph.delta;
 
             if (circ->king_text[2].ScaleVector.vx > ONE * 2)
             {
@@ -1110,8 +1112,8 @@ void circus_update(IntroCircus *circ)
         }
         case 4:
         {
-            circ->king_text[3].ScaleVector.vx += 1024;
-            circ->king_text[3].ScaleVector.vy += 1024;
+            circ->king_text[3].ScaleVector.vx += 1024 * graph.delta;
+            circ->king_text[3].ScaleVector.vy += 1024 * graph.delta;
 
             if (circ->king_text[3].ScaleVector.vx > ONE * 4)
             {
@@ -1136,7 +1138,7 @@ void circus_update(IntroCircus *circ)
             {
                 if (circ->king_text[i].alpha > 0)
                 {
-                    circ->king_text[i].alpha -= 2;
+                    circ->king_text[i].alpha -= 2 * graph.delta;
                     circ->king_text[i].tpage = getTPage(0, 1, 320, 0);
                 }
                 else
@@ -1147,7 +1149,7 @@ void circus_update(IntroCircus *circ)
 
             if (circ->king.r > 63)
             {
-                circ->king.r -= 2;
+                circ->king.r -= 2 * graph.delta;
             }
             else
             {
@@ -1156,7 +1158,7 @@ void circus_update(IntroCircus *circ)
 
             if (circ->king.g > 63)
             {
-                circ->king.g -= 2;
+                circ->king.g -= 2 * graph.delta;
             }
             else
             {
@@ -1165,7 +1167,7 @@ void circus_update(IntroCircus *circ)
 
             if (circ->king.b < 63)
             {
-                circ->king.b += 2;
+                circ->king.b += 2 * graph.delta;
             }
             else
             {
@@ -1183,12 +1185,12 @@ void circus_update(IntroCircus *circ)
         {
             if (circ->tick >= fps * 6)
             {
-                circ->redorn_head.MovVector.vx += 2;
-                circ->redorn_head.MovVector.vy += 2;
+                circ->redorn_head.MovVector.vx += 2 * graph.delta;
+                circ->redorn_head.MovVector.vy += 2 * graph.delta;
 
                 if (circ->redorn_head.alpha < 128)
                 {
-                    circ->redorn_head.alpha += 2;
+                    circ->redorn_head.alpha += 2 * graph.delta;
                 }
                 else
                 {
@@ -1222,7 +1224,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 9)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -1234,8 +1236,8 @@ void circus_update(IntroCircus *circ)
     }
     case 4:
     {
-        circ->legend.ScaleVector.vx += 512;
-        circ->legend.ScaleVector.vy += 512;
+        circ->legend.ScaleVector.vx += 512 * graph.delta;
+        circ->legend.ScaleVector.vy += 512 * graph.delta;
 
         if (circ->legend.ScaleVector.vx > ONE * 2)
         {
@@ -1250,7 +1252,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 2)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -1266,7 +1268,7 @@ void circus_update(IntroCircus *circ)
         {
             if (circ->witness.alpha < 128)
             {
-                circ->witness.alpha += 4;
+                circ->witness.alpha += 4 * graph.delta;
             }
             else
             {
@@ -1284,7 +1286,7 @@ void circus_update(IntroCircus *circ)
         {
             if (circ->witness.alpha > 0)
             {
-                circ->witness.alpha -= 4;
+                circ->witness.alpha -= 4 * graph.delta;
                 circ->witness.tpage = getTPage(0, 1, 320, 0);
             }
             else
@@ -1294,7 +1296,7 @@ void circus_update(IntroCircus *circ)
 
             if (circ->secret.alpha > 0)
             {
-                circ->secret.alpha -= 4;
+                circ->secret.alpha -= 4 * graph.delta;
                 circ->secret.tpage = getTPage(0, 1, 320, 0);
             }
             else
@@ -1305,7 +1307,7 @@ void circus_update(IntroCircus *circ)
 
         if (circ->tick < fps * 6)
         {
-            circ->tick++;
+            circ->tick += graph.delta;
         }
         else
         {
@@ -1322,6 +1324,7 @@ void circus_update(IntroCircus *circ)
 
 void title_init(IntroTitle *title)
 {
+    graph.last_vsync = VSync(-1);
     graph.scr_fade = 128;
     
     title->mov.vx = 0;
@@ -5156,8 +5159,8 @@ void title_update(IntroTitle *title)
             {
                 int deadzone = 32;
 
-                graph.camRot.vy -= (ctrl1.rs_x > deadzone || ctrl1.rs_x < -deadzone ? (ctrl1.rs_x / 4) : 0);
-                graph.camRot.vx += (ctrl1.rs_y > deadzone || ctrl1.rs_y < -deadzone ? (ctrl1.rs_y / 4) : 0);
+                graph.camRot.vy -= (ctrl1.rs_x > deadzone || ctrl1.rs_x < -deadzone ? (ctrl1.rs_x / 4) : 0) * graph.delta;
+                graph.camRot.vx += (ctrl1.rs_y > deadzone || ctrl1.rs_y < -deadzone ? (ctrl1.rs_y / 4) : 0) * graph.delta;
 
                 if (graph.camRot.vx > 1000)
                 {
@@ -5185,24 +5188,24 @@ void title_update(IntroTitle *title)
                 up.vy = ccos(pitch);
                 up.vz = ccos(yaw) * csin(pitch) >> 12;
 
-                graph.camPos.vx -= (forward.vx * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) >> 12;
-                graph.camPos.vy -= (forward.vy * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) >> 12;
-                graph.camPos.vz += (forward.vz * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) >> 12;
+                graph.camPos.vx -= ((forward.vx * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) * graph.delta) >> 12;
+                graph.camPos.vy -= ((forward.vy * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) * graph.delta) >> 12;
+                graph.camPos.vz += ((forward.vz * (ctrl1.ls_y > deadzone || ctrl1.ls_y < -deadzone ? (ctrl1.ls_y / 4) : 0)) * graph.delta) >> 12;
 
-                graph.camPos.vx -= (right.vx * (ctrl1.ls_x > deadzone || ctrl1.ls_x < -deadzone ? (ctrl1.ls_x / 4) : 0)) >> 12;
-                graph.camPos.vz += (right.vz * (ctrl1.ls_x > deadzone || ctrl1.ls_x < -deadzone ? (ctrl1.ls_x / 4) : 0)) >> 12;
+                graph.camPos.vx -= ((right.vx * (ctrl1.ls_x > deadzone || ctrl1.ls_x < -deadzone ? (ctrl1.ls_x / 4) : 0)) * graph.delta) >> 12;
+                graph.camPos.vz += ((right.vz * (ctrl1.ls_x > deadzone || ctrl1.ls_x < -deadzone ? (ctrl1.ls_x / 4) : 0)) * graph.delta) >> 12;
 
                 if (!(ctrl1.btn & PAD_L1) || !(ctrl1.btn & PAD_R1))
                 {
-                    graph.camPos.vx -= (up.vx * 32) >> 12;
-                    graph.camPos.vy -= (up.vy * 32) >> 12;
-                    graph.camPos.vz += (up.vz * 32) >> 12;
+                    graph.camPos.vx -= ((up.vx * 32) * graph.delta) >> 12;
+                    graph.camPos.vy -= ((up.vy * 32) * graph.delta) >> 12;
+                    graph.camPos.vz += ((up.vz * 32) * graph.delta) >> 12;
                 }
                 else if (!(ctrl1.btn & PAD_L2) || !(ctrl1.btn & PAD_R2))
                 {
-                    graph.camPos.vx += (up.vx * 32) >> 12;
-                    graph.camPos.vy += (up.vy * 32) >> 12;
-                    graph.camPos.vz -= (up.vz * 32) >> 12;
+                    graph.camPos.vx += ((up.vx * 32) * graph.delta) >> 12;
+                    graph.camPos.vy += ((up.vy * 32) * graph.delta) >> 12;
+                    graph.camPos.vz -= ((up.vz * 32) * graph.delta) >> 12;
                 }
 
                 if (!(ctrl1.btn & PAD_L3) && !(ctrl1.btn & PAD_R3))
@@ -5460,8 +5463,8 @@ void title_update(IntroTitle *title)
     {
     case 0:
     {
-        title->spr[0].ScaleVector.vx -= 256;
-        title->spr[0].MovVector.vx -= 8;
+        title->spr[0].ScaleVector.vx -= 256 * graph.delta;
+        title->spr[0].MovVector.vx -= 8 * graph.delta;
 
         if (title->spr[0].MovVector.vx < -64)
         {
@@ -5482,8 +5485,8 @@ void title_update(IntroTitle *title)
     }
     case 1:
     {
-        title->spr[0].ScaleVector.vx += 512;
-        title->spr[0].MovVector.vx += 4;
+        title->spr[0].ScaleVector.vx += 512 * graph.delta;
+        title->spr[0].MovVector.vx += 4 * graph.delta;
 
         if (title->spr[0].MovVector.vx > 0)
         {
@@ -5524,8 +5527,8 @@ void title_update(IntroTitle *title)
                     control.vib_sync[porting4] = TRUE;
                 }
 
-                title->spr[1].ScaleVector.vx += 512;
-                title->spr[1].ScaleVector.vy += 512;
+                title->spr[1].ScaleVector.vx += 512 * graph.delta;
+                title->spr[1].ScaleVector.vy += 512 * graph.delta;
 
                 if (title->spr[1].ScaleVector.vx > ONE * 2)
                 {
@@ -5575,8 +5578,8 @@ void title_update(IntroTitle *title)
                     control.vib_sync[porting4] = TRUE;
                 }
 
-                title->spr[1].ScaleVector.vx -= 256;
-                title->spr[1].MovVector.vx += 8;
+                title->spr[1].ScaleVector.vx -= 256 * graph.delta;
+                title->spr[1].MovVector.vx += 8 * graph.delta;
 
                 if (title->spr[1].MovVector.vx > -20)
                 {
@@ -5588,8 +5591,8 @@ void title_update(IntroTitle *title)
                     title->spr[1].ScaleVector.vx = 1024;
                 }
 
-                title->spr[2].ScaleVector.vx -= 256;
-                title->spr[2].MovVector.vx -= 8;
+                title->spr[2].ScaleVector.vx -= 256 * graph.delta;
+                title->spr[2].MovVector.vx -= 8 * graph.delta;
 
                 if (title->spr[2].MovVector.vx < 20)
                 {
@@ -5644,8 +5647,8 @@ void title_update(IntroTitle *title)
                     control.vib_sync[porting4] = TRUE;
                 }
 
-                title->spr[2].ScaleVector.vx += 512;
-                title->spr[2].ScaleVector.vy += 512;
+                title->spr[2].ScaleVector.vx += 512 * graph.delta;
+                title->spr[2].ScaleVector.vy += 512 * graph.delta;
 
                 if (title->spr[2].ScaleVector.vx > ONE * 2)
                 {
@@ -5677,8 +5680,8 @@ void title_update(IntroTitle *title)
         }
         else if (LNG == 0)
         {
-            title->spr[1].ScaleVector.vx += 512;
-            title->spr[1].MovVector.vx -= 4;
+            title->spr[1].ScaleVector.vx += 512 * graph.delta;
+            title->spr[1].MovVector.vx -= 4 * graph.delta;
 
             if (title->spr[1].MovVector.vx < -80)
             {
@@ -5690,8 +5693,8 @@ void title_update(IntroTitle *title)
                 title->spr[1].ScaleVector.vx = ONE * 2;
             }
 
-            title->spr[2].ScaleVector.vx += 512;
-            title->spr[2].MovVector.vx += 4;
+            title->spr[2].ScaleVector.vx += 512 * graph.delta;
+            title->spr[2].MovVector.vx += 4 * graph.delta;
 
             if (title->spr[2].MovVector.vx > 80)
             {
@@ -5730,8 +5733,8 @@ void title_update(IntroTitle *title)
                 control.motor[porting4][1] = 0;
                 control.vib_sync[porting4] = TRUE;
             }
-            title->spr[3].ScaleVector.vx += 512;
-            title->spr[3].ScaleVector.vy += 512;
+            title->spr[3].ScaleVector.vx += 512 * graph.delta;
+            title->spr[3].ScaleVector.vy += 512 * graph.delta;
 
             if (title->spr[3].ScaleVector.vx > ONE * 2)
             {
@@ -5769,7 +5772,7 @@ void title_update(IntroTitle *title)
         {
             if (title->rot.vy < ONE)
             {
-                title->rot.vy += REGION_CODE != 0 ? 16 : 20;
+                title->rot.vy += (REGION_CODE != 0 ? 16 : 20) * graph.delta;
             }
             else
             {
@@ -5778,7 +5781,7 @@ void title_update(IntroTitle *title)
 
             if (title->mov.vy > 512)
             {
-                title->mov.vy -= REGION_CODE != 0 ? 16 : 20;
+                title->mov.vy -= (REGION_CODE != 0 ? 16 : 20) * graph.delta;
             }
             else
             {
@@ -5817,7 +5820,7 @@ void title_update(IntroTitle *title)
 
             // graph.camRot.vx = ratan2(dir.vy, distXZ);
 
-            title->tick++;
+            title->tick += graph.delta;
         }
         else
         {
